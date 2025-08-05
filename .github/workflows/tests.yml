@@ -8,13 +8,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      docker:
-        image: docker:20.10.16
-        options: --privileged
-        ports:
-          - 8080:8080
-
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -26,7 +19,7 @@ jobs:
 
       - name: Start NocoDB container
         run: |
-          docker-compose up -d
+          docker compose up -d
           for i in {1..30}; do
             STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8080/)
             if [ "$STATUS_CODE" -eq 200 ]; then
