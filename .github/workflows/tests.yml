@@ -2,11 +2,18 @@ name: Run Tests
 
 on:
   pull_request:
-    branches: [main, develop] # or the branches you want to protect
+    branches: [main, develop]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:20.10.16
+        options: --privileged
+        ports:
+          - 8080:8080
 
     steps:
       - name: Checkout code
@@ -15,7 +22,21 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.11" # or your actual Python version
+          python-version: "3.11"
+
+      - name: Start NocoDB container
+        run: |
+          docker-compose up -d
+          for i in {1..30}; do
+            STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:8080/)
+            if [ "$STATUS_CODE" -eq 200 ]; then
+              echo "NocoDB is up!"
+              break
+            else
+              echo "Waiting for NocoDB to start... (HTTP status: $STATUS_CODE)"
+              sleep 2
+            fi
+          done
 
       - name: Install dependencies
         run: |
