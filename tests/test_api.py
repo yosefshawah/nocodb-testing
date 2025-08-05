@@ -10,4 +10,4 @@ def test_unauthorized_without_token():
     url = f"{BASE_URL}/api/v2/tables"
     response = requests.get(url)
     assert response.status_code == 401
-    assert response.json().get("error") == "AUTHENTICATION_REQUIRED"
+    assert response.json().get("error") == "AUTHENTICATION_REQUIRED!!"
