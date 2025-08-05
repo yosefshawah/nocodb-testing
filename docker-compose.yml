@@ -1,0 +1,11 @@
+version: "3.9" # or just remove this line as Docker says it's obsolete
+
+services:
+  noco:
+    image: nocodb/nocodb:latest
+    container_name: noco
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./nocodb:/usr/app/data/
+    restart: unless-stopped

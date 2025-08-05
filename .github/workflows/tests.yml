@@ -1,0 +1,30 @@
+name: Run Tests
+
+on:
+  pull_request:
+    branches: [main, develop] # or the branches you want to protect
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11" # or your actual Python version
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r api-tests/requirements.txt
+
+      - name: Run tests
+        run: |
+          source venv/bin/activate
+          pytest api-tests/
