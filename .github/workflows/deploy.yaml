@@ -3,7 +3,7 @@ name: Deploy to EC2 on push
 on:
   push:
     branches:
-      - main # or your deployment branch
+      - main # or your deployment branch!
 
 jobs:
   deploy:
@@ -21,7 +21,8 @@ jobs:
       - name: SSH & Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@52.18.93.49 << 'EOF'
-            cd /home/ubuntu/nocodb-testing
-            git pull
-            docker-compose up -d --build
+            cd /home/ubuntu/nocodb-prod
+            git pull origin main
+            docker-compose build
+            sudo systemctl restart myapp.service
           EOF
