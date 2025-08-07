@@ -1,0 +1,27 @@
+name: Deploy to EC2 on push
+
+on:
+  push:
+    branches:
+      - main # or your deployment branch
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: SSH & Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no ubuntu@EC2_PUBLIC_IP << 'EOF'
+            cd /path/to/your/app
+            git pull
+            docker-compose up -d --build
+          EOF
