@@ -1,5 +1,5 @@
 import requests
-#testing automated CD
+#testing automated CD!
 BASE_URL = "http://52.18.93.49:8080/"
 
 class TestServerHealth:
