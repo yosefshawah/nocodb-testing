@@ -2,7 +2,7 @@ version: "3.9" # or just remove this line as Docker says it's obsolete
 
 services:
   noco:
-    image: nocodb/nocodb:latest
+    image: nocodb/nocodb:0.264.4
     container_name: noco
     ports:
       - "8080:8080"
