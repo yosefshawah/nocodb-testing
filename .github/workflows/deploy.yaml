@@ -18,11 +18,11 @@ jobs:
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
 
-      - name: SSH & Deploy to EC2
+      - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@52.18.93.49 << 'EOF'
-            cd /home/ubuntu/nocodb-prod
-            git pull origin main
-            docker-compose up -d --build
-            sudo systemctl restart myapp.service
+          ssh -o StrictHostKeyChecking=no ubuntu@<EC2-IP> << 'EOF'
+            cd ~/nocodb-testing
+            git pull
+            docker-compose down
+            docker-compose up -d
           EOF
