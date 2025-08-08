@@ -20,7 +20,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no ubuntu@<EC2-IP> << 'EOF'
+          ssh -o StrictHostKeyChecking=no ubuntu@<EC2-IP> <<-'EOF'
             cd ~/nocodb-testing
             git pull
             docker-compose down
