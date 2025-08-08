@@ -73,9 +73,32 @@ jobs:
           # Clean up
           rm -rf chromedriver.zip google-chrome-stable_current_amd64.deb
 
+          # Create temporary directories for Chrome user data
+          mkdir -p /tmp/chrome-user-data
+          chmod 755 /tmp/chrome-user-data
+
+      - name: Cleanup existing Chrome processes
+        run: |
+          # Kill any existing Chrome processes
+          pkill -f chrome || true
+          pkill -f chromedriver || true
+          # Clean up any existing user data directories
+          rm -rf /tmp/chrome-user-data-* || true
+
       - name: Run Selenium tests
         env:
           HEADLESS: true
           OLLAMA_URL: http://52.18.93.49:8080/
+          DISPLAY: :99
         run: |
-          pytest tests/ -v
+          # Start Xvfb for headless display
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 2  # Give Xvfb time to start
+
+          # Run tests with proper cleanup
+          pytest tests/ -v --tb=short
+
+          # Cleanup Chrome processes and user data
+          pkill -f chrome || true
+          pkill -f chromedriver || true
+          rm -rf /tmp/chrome-user-data-* || true
