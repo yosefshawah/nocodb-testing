@@ -3,7 +3,7 @@ name: Deploy to EC2 on push
 on:
   push:
     branches:
-      - main # or your deployment branch!
+      - main
 
 jobs:
   deploy:
@@ -17,11 +17,12 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
+
       - name: Deploy to EC2
         run: |
           ssh -o StrictHostKeyChecking=no ubuntu@<EC2-IP> << 'EOF'
-          cd ~/nocodb-testing
-          git pull
-          docker-compose down
-          docker-compose up -d
+            cd ~/nocodb-testing
+            git pull
+            docker-compose down
+            docker-compose up -d
           EOF
