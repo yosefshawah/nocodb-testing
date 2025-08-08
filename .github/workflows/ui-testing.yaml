@@ -53,19 +53,52 @@ jobs:
       - name: Install Chrome & ChromeDriver
         run: |
           sudo apt update
-          sudo apt install -y wget unzip xvfb libxi6 libgconf-2-4
+          sudo apt install -y wget unzip xvfb libxi6 libgbm-dev libnss3 libxshmfence1 libasound2t64
+
+          # Download and install latest stable Google Chrome
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
+
+          # Get Chrome version number like "139.0.7258.66"
           CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+\.\d+\.\d+")
-          wget -q -O chromedriver.zip "https://chromedriver.storage.googleapis.com/$CHROME_VERSION/chromedriver_linux64.zip" || \
-            wget -q -O chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/$CHROME_VERSION/linux64/chromedriver-linux64.zip"
+
+          # Download matching ChromeDriver from official "chrome-for-testing" bucket (preferred)
+          wget -q -O chromedriver.zip "https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_VERSION}/linux64/chromedriver-linux64.zip"
+
+          # Unzip ChromeDriver, then move binary correctly (handles folder name)
           unzip chromedriver.zip
-          sudo mv chromedriver /usr/bin/chromedriver
-          sudo chmod +x /usr/bin/chromedriver
+          mv */chromedriver /usr/local/bin/chromedriver
+          sudo chmod +x /usr/local/bin/chromedriver
+
+          # Clean up
+          rm -rf chromedriver.zip google-chrome-stable_current_amd64.deb
+
+          # Create temporary directories for Chrome user data
+          mkdir -p /tmp/chrome-user-data
+          chmod 755 /tmp/chrome-user-data
+
+      - name: Cleanup existing Chrome processes
+        run: |
+          # Kill any existing Chrome processes
+          pkill -f chrome || true
+          pkill -f chromedriver || true
+          # Clean up any existing user data directories
+          rm -rf /tmp/chrome-user-data-* || true
 
       - name: Run Selenium tests
         env:
           HEADLESS: true
           OLLAMA_URL: http://52.18.93.49:8080/
+          DISPLAY: :99
         run: |
-          pytest tests/ -v
+          # Start Xvfb for headless display
+          Xvfb :99 -screen 0 1024x768x24 > /dev/null 2>&1 &
+          sleep 2  # Give Xvfb time to start
+
+          # Run tests with proper cleanup
+          pytest tests/ -v --tb=short
+
+          # Cleanup Chrome processes and user data
+          pkill -f chrome || true
+          pkill -f chromedriver || true
+          rm -rf /tmp/chrome-user-data-* || true
