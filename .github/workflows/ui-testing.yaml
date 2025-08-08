@@ -54,7 +54,7 @@ jobs:
         run: |
           sudo apt update
           # Removed libgconf-2-4 (deprecated)
-          sudo apt install -y wget unzip xvfb libxi6 libgbm-dev libnss3 libxshmfence1 libasound2
+          sudo apt install -y wget unzip xvfb libxi6 libgbm-dev libnss3 libxshmfence1 libasound2t64
           wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
           sudo apt install -y ./google-chrome-stable_current_amd64.deb
           CHROME_VERSION=$(google-chrome --version | grep -oP "\d+\.\d+\.\d+\.\d+")
