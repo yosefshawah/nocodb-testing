@@ -8,7 +8,7 @@ class TestDeleteEmployee:
 
     def test_delete_employee_id(self):
         delete_url = Endpoints.employees_records()
-        payload = {"Id": 2}  # Delete record with Id 2
+        payload = {"Id": 2}  # Delete record with Id 2 (bob)
 
         # Perform DELETE with JSON body (matches your curl exactly)
         resp = make_api_request('DELETE', delete_url, data=payload, headers=self.headers)
