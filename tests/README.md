@@ -16,7 +16,34 @@ tests/
 
 The `config.py` file contains all shared configuration and utilities:
 
+### **Environment Variables Setup**
+
+1. **Create a `.env` file** in the project root:
+
+```bash
+# NocoDB Configuration
+NOCODB_BASE_URL=http://52.18.93.49:8080/
+NOCODB_API_TOKEN=xpkrixNKoiHqfwzsIDoNh7MLRjP4FLR48gV3QFgQ
+EMPLOYEES_TABLE_ID=m3jxshm3jce0b2v
+ENVIRONMENT=production
+```
+
+2. **Install python-dotenv**:
+
+```bash
+pip install python-dotenv
+```
+
+3. **Environment Variables**:
+
+- `NOCODB_BASE_URL`: NocoDB server URL
+- `NOCODB_API_TOKEN`: Authentication token
+- `EMPLOYEES_TABLE_ID`: Descriptive table ID for employees
+- `ENVIRONMENT`: Current environment (production/development/test)
+
 ### **Base Configuration**
+
+The configuration automatically loads from environment variables with fallbacks:
 
 - `BASE_URL`: NocoDB server URL
 - `API_TOKEN`: Authentication token
@@ -66,6 +93,21 @@ Comprehensive employee record management tests:
 - `test_salary_field_behavior()`: Multiple salary format testing
 
 ## 🚀 Usage
+
+### **Setup Environment**
+
+1. **Copy environment variables**:
+
+```bash
+cp .env.example .env
+# Edit .env with your values
+```
+
+2. **Install dependencies**:
+
+```bash
+pip install -r requirements.txt
+```
 
 ### **Run All Tests**
 
@@ -161,9 +203,35 @@ def new_feature_endpoint():
 - **Scalability**: Easy to add new test files and features
 - **Readability**: Clear separation of concerns
 - **Reusability**: Shared utilities can be used across all tests
+- **Security**: Sensitive data stored in environment variables
 
 ## 🔐 Security Notes
 
-- API tokens are stored in the configuration file
-- Consider using environment variables for production
+- API tokens are stored in environment variables (`.env` file)
+- `.env` file should be added to `.gitignore`
 - Never commit sensitive tokens to version control
+- Use different tokens for different environments
+- Consider using secrets management for production
+
+## 🌍 Environment Management
+
+### **Production**
+
+```bash
+ENVIRONMENT=production
+NOCODB_BASE_URL=http://52.18.93.49:8080/
+```
+
+### **Development**
+
+```bash
+ENVIRONMENT=development
+NOCODB_BASE_URL=http://localhost:8080/
+```
+
+### **Testing**
+
+```bash
+ENVIRONMENT=test
+NOCODB_BASE_URL=http://test-server:8080/
+```
