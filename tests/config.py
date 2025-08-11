@@ -8,7 +8,7 @@ import os
 
 # Base configuration - use environment variables with fallbacks
 BASE_URL = os.getenv('NOCODB_URL', 'http://52.18.93.49:8080/')
-
+# BASE_URL = "http://localhost:8080/"
 API_TOKEN = os.getenv('API_TOKEN', 'xpkrixNKoiHqfwzsIDoNh7MLRjP4FLR48gV3QFgQ')
 # Environment detection
 ENVIRONMENT = os.getenv('ENVIRONMENT', 'production')
