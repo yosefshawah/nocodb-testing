@@ -135,7 +135,7 @@ def make_api_request(method, url, data=None, headers=None):
         elif method.upper() == 'PATCH':
             response = requests.patch(url, headers=headers, json=data, timeout=10)
         elif method.upper() == 'DELETE':
-            response = requests.delete(url, headers=headers, timeout=10)
+            response = requests.delete(url, headers=headers, json=data, timeout=10)
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
         
