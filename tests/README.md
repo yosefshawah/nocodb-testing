@@ -7,8 +7,11 @@ This directory contains comprehensive tests for the NocoDB API, organized with a
 ```
 tests/
 ├── config.py                    # Shared configuration and utilities
+├── conftest.py                  # Pytest fixtures and teardown
 ├── test_server_health.py        # Server health and availability tests
-├── test_add_employee.py         # Employee record management tests
+├── test_add_employee.py         # Employee record creation tests
+├── test_get_employees.py        # Employee record retrieval tests
+├── test_delete_employee.py      # Employee record deletion tests
 └── README.md                    # This file
 ```
 
@@ -57,13 +60,12 @@ The configuration automatically loads from environment variables with fallbacks:
 - `is_error_response()`: Checks if response indicates error
 - `get_response_data()`: Safely extracts JSON data from response
 
-### **Sample Data (`SampleData` class)**
+### **Department and Role Mappings**
 
-- `valid_employee()`: Valid employee record
-- `employee_with_string_salary()`: Employee with string salary
-- `invalid_employee()`: Invalid data for validation testing
-- `partial_employee()`: Incomplete data for required field testing
-- `salary_test_cases()`: Different salary format test cases
+- `DEPARTMENT_NAME_TO_ID`: Maps department names to IDs (IT, Human Resources, Finance)
+- `ROLE_NAME_TO_ID`: Maps role names to IDs (Manager, Developer, HR Specialist)
+- `get_department_id_by_name()`: Helper to get department ID by name
+- `get_role_id_by_name()`: Helper to get role ID by name
 
 ### **API Endpoints (`Endpoints` class)**
 
@@ -82,15 +84,21 @@ Tests server availability and basic connectivity:
 
 ### **`test_add_employee.py`**
 
-Comprehensive employee record management tests:
+Employee record creation tests:
 
-- `test_authentication_status()`: Verify API authentication
-- `test_create_record_success()`: Successful record creation
-- `test_create_record_with_string_salary()`: String salary handling
-- `test_create_record_invalid_data()`: Invalid data validation
-- `test_create_record_missing_required_fields()`: Required field validation
-- `test_create_record_matching_expected_response()`: Response structure validation
-- `test_salary_field_behavior()`: Multiple salary format testing
+- `test_add_employee_and_fetch()`: Creates employee with IT department and Developer role, then fetches and verifies
+
+### **`test_get_employees.py`**
+
+Employee record retrieval tests:
+
+- `test_get_employees_schema()`: Validates GET employees response schema with pagination
+
+### **`test_delete_employee.py`**
+
+Employee record deletion tests:
+
+- `test_delete_employee_id()`: Deletes employee with Id 2 and verifies it's removed
 
 ## 🚀 Usage
 
@@ -131,15 +139,21 @@ pytest tests/test_add_employee.py -v
 # Only server health tests
 pytest tests/test_server_health.py::TestServerHealth -v
 
-# Only employee API tests
-pytest tests/test_add_employee.py::TestRecordsAPI -v
+# Only employee creation tests
+pytest tests/test_add_employee.py::TestAddEmployee -v
+
+# Only employee retrieval tests
+pytest tests/test_get_employees.py::TestGetEmployees -v
+
+# Only employee deletion tests
+pytest tests/test_delete_employee.py::TestDeleteEmployee -v
 ```
 
 ### **Run Specific Test Methods**
 
 ```bash
 # Single test method
-pytest tests/test_add_employee.py::TestRecordsAPI::test_create_record_success -v
+pytest tests/test_add_employee.py::TestAddEmployee::test_add_employee_and_fetch -v
 ```
 
 ## 🔄 Adding New Tests
