@@ -4,13 +4,13 @@ Contains common settings, API tokens, table IDs, and helper functions
 """
 
 import requests
-
-# Base configuration
-BASE_URL = "http://52.18.93.49:8080/"
-API_TOKEN = "xpkrixNKoiHqfwzsIDoNh7MLRjP4FLR48gV3QFgQ"
-
-# Table IDs - descriptive names for better maintainability
-EMPLOYEES_TABLE_ID = "m3jxshm3jce0b2v"
+import os
+BASE_URL = os.getenv('NOCODB_URL', 'http://52.18.93.49:8080/')
+#BASE_URL = "http://52.18.93.49:8080/"
+# API_TOKEN = "xpkrixNKoiHqfwzsIDoNh7MLRjP4FLR48gV3QFgQ"
+API_TOKEN = os.getenv('API_TOKEN', 'xpkrixNKoiHqfwzsIDoNh7MLRjP4FLR48gV3QFgQ')
+# Environment detection
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'production')
 
 # Common headers for API requests
 def get_auth_headers():
