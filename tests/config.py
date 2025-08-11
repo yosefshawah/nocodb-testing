@@ -4,13 +4,37 @@ Contains common settings, API tokens, table IDs, and helper functions
 """
 
 import requests
+import os
 
-# Base configuration
-BASE_URL = "http://52.18.93.49:8080/"
-API_TOKEN = "xpkrixNKoiHqfwzsIDoNh7MLRjP4FLR48gV3QFgQ"
+# Base configuration - use environment variables with fallbacks
+BASE_URL = os.getenv('NOCODB_URL', 'http://52.18.93.49:8080/')
 
-# Table IDs - descriptive names for better maintainability
-EMPLOYEES_TABLE_ID = "m3jxshm3jce0b2v"
+API_TOKEN = os.getenv('API_TOKEN', 'xpkrixNKoiHqfwzsIDoNh7MLRjP4FLR48gV3QFgQ')
+# Environment detection
+ENVIRONMENT = os.getenv('ENVIRONMENT', 'production')
+
+# Descriptive table ID for employees (if needed elsewhere)
+EMPLOYEES_TABLE_ID = os.getenv('EMPLOYEES_TABLE_ID', 'm3jxshm3jce0b2v')
+
+# ----- Department and Role mappings (adjust to match your DB snapshot) -----
+# You can override any of these via env vars like DEPT_IT_ID, DEPT_HR_ID, DEPT_FINANCE_ID, ROLE_DEVELOPER_ID, etc.
+DEPARTMENT_NAME_TO_ID = {
+    'IT': int(os.getenv('DEPT_IT_ID', '1')),
+    'Human Resources': int(os.getenv('DEPT_HR_ID', '2')),
+    'Finance': int(os.getenv('DEPT_FINANCE_ID', '3')),
+}
+
+ROLE_NAME_TO_ID = {
+    'Manager': int(os.getenv('Manager', '1')),
+    'Developer': int(os.getenv('Developer', '2')),
+    'HR Specialist': int(os.getenv('HR Specialist', '3')),
+}
+
+def get_department_id_by_name(name: str) -> int:
+    return DEPARTMENT_NAME_TO_ID[name]
+
+def get_role_id_by_name(name: str) -> int:
+    return ROLE_NAME_TO_ID[name]
 
 # Common headers for API requests
 def get_auth_headers():
@@ -108,8 +132,10 @@ def make_api_request(method, url, data=None, headers=None):
             response = requests.post(url, headers=headers, json=data, timeout=10)
         elif method.upper() == 'PUT':
             response = requests.put(url, headers=headers, json=data, timeout=10)
+        elif method.upper() == 'PATCH':
+            response = requests.patch(url, headers=headers, json=data, timeout=10)
         elif method.upper() == 'DELETE':
-            response = requests.delete(url, headers=headers, timeout=10)
+            response = requests.delete(url, headers=headers, json=data, timeout=10)
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
         

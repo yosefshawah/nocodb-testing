@@ -10,10 +10,3 @@ class TestServerHealth:
         assert response is not None, "Server is not responding"
         assert response.status_code in (200, 302), f"Expected 200 or 302, got {response.status_code}"
     
-    def test_server_accessible(self):
-        """Test that the server is accessible from the network"""
-        response = make_api_request('GET', BASE_URL)
-        assert response is not None, "Server is not accessible"
-        assert response.status_code in (200, 302), f"Server not accessible, got {response.status_code}"
-    
-   
