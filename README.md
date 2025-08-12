@@ -1,10 +1,3 @@
-# 🚀 NocoDB Testing Project
-
-[![CI/CD Pipeline](https://github.com/yosefshawah/nocodb-testing/actions/workflows/deploy.yaml/badge.svg)](https://github.com/yosefshawah/nocodb-testing/actions/workflows/deploy.yaml)
-[![UI Tests](https://github.com/yosefshawah/nocodb-testing/actions/workflows/ui-testing.yaml/badge.svg)](https://github.com/yosefshawah/nocodb-testing/actions/workflows/ui-testing.yaml)
-[![API Tests](https://github.com/yosefshawah/nocodb-testing/actions/workflows/tests.yaml/badge.svg)](https://github.com/yosefshawah/nocodb-testing/actions/workflows/tests.yaml)
-
-A comprehensive testing and deployment project for NocoDB, featuring automated CI/CD pipelines, API testing, and UI testing capabilities.
 
 ## 📋 What is NocoDB?
 
