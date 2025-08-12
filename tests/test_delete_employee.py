@@ -1,4 +1,3 @@
-import pytest
 from config import get_auth_headers, Endpoints, make_api_request
 
 class TestDeleteEmployee:
