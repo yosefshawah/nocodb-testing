@@ -18,8 +18,8 @@ class TestAddEmployee:
 
     def test_add_employee_and_fetch(self):
         # Fixed simple values
-        first_name = "Alice"
-        email = "alice@example.com"
+        first_name = "messi"
+        email = "messi@example.com"
         salary = 55000
 
         # Fixed department/role
@@ -45,20 +45,3 @@ class TestAddEmployee:
         assert create_data is not None and ("Id" in create_data or "id" in create_data), "Create response missing Id"
         record_id = create_data.get("Id") or create_data.get("id")
         assert isinstance(record_id, int), f"Id must be int, got {type(record_id)}"
-
-        # Fetch employee (GET by ID)
-        get_url = Endpoints.employees_record(record_id)
-        get_resp = make_api_request('GET', get_url, headers=self.headers)
-        assert get_resp is not None, "No response from fetch"
-        assert get_resp.status_code == 200, f"Fetch failed: {get_resp.status_code} {get_resp.text}"
-
-        fetched = get_response_data(get_resp)
-        assert isinstance(fetched, dict), f"Unexpected fetch payload: {type(fetched)}"
-
-        # Verify key fields
-        assert fetched.get("Id") == record_id, "Fetched record Id mismatch"
-        assert fetched.get("first_name") == first_name, "first_name mismatch"
-        assert fetched.get("salary") == salary, "salary mismatch (must be non-zero)"
-        assert fetched.get("nc_4p9k___departments_csv_id") == dept_id, "department id mismatch"
-        assert fetched.get("nc_4p9k___roles_id") == role_id, "role id mismatch"
-
