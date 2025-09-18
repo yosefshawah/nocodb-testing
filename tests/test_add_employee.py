@@ -11,7 +11,7 @@ from config import (
 
 class TestAddEmployee:
     """Create an employee (IT, Developer), then fetch it and verify it exists."""
-
+# Test case 1: Add an employee with valid values
     @classmethod
     def setup_class(cls):
         cls.headers = get_auth_headers()
